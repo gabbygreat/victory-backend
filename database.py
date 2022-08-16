@@ -99,7 +99,7 @@ class Database:
                 room_model.guarantor = guarantor[index]
             roomInfoModel.append(room_model)
 
-        return roomInfoModel
+        return {'flag': True, 'data': roomInfoModel}
 
     def add_room(self):
         if len(self.get_all_rooms()) < 63:

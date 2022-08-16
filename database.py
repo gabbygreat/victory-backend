@@ -1,6 +1,7 @@
 from cmath import phase
+from unicodedata import name
 from sqlmodel import SQLModel, create_engine, Session, select
-from models import RoomInfo, Guarantor, Occupant
+from models import RoomInfo, Guarantor, Occupant, RoomInfoModel
 import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -28,6 +29,48 @@ room_number: dict = {
     19: 'C002',
     20: 'C004',
     21: 'C005',
+    22: 'A101',
+    23: 'A102',
+    24: 'A103',
+    25: 'A104',
+    26: 'A105',
+    27: 'A106',
+    28: 'A107',
+    29: 'A108',
+    30: 'B101',
+    31: 'B102',
+    32: 'B103',
+    33: 'B104',
+    34: 'B105',
+    35: 'B106',
+    36: 'B107',
+    37: 'B108',
+    38: 'B109',
+    39: 'C101',
+    40: 'C102',
+    41: 'C104',
+    42: 'C105',
+    43: 'A201',
+    44: 'A202',
+    45: 'A203',
+    46: 'A204',
+    47: 'A205',
+    48: 'A206',
+    49: 'A207',
+    50: 'A208',
+    51: 'B201',
+    52: 'B202',
+    53: 'B203',
+    54: 'B204',
+    55: 'B205',
+    56: 'B206',
+    57: 'B207',
+    58: 'B208',
+    59: 'B209',
+    60: 'C201',
+    61: 'C202',
+    62: 'C204',
+    63: 'C205',
 }
 
 
@@ -38,10 +81,25 @@ class Database:
             conn_str, echo=True, connect_args=connect_args)
         SQLModel.metadata.create_all(self.engine)
 
-    def get_all_rooms(self):
+    def get_all_rooms(self) -> list[RoomInfoModel]:
         with Session(self.engine) as session:
             rooms = session.exec(select(RoomInfo)).all()
-        return rooms
+            occupant = session.exec(select(Occupant)).all()
+            guarantor = session.exec(select(Guarantor)).all()
+            roomInfoModel: list[RoomInfoModel] = []
+
+        for index in range(len(rooms)):
+            room_model = RoomInfoModel(
+                id=rooms[index].id,
+                roomNumber=rooms[index].roomNumber,
+                occupied=rooms[index].occupied
+            )
+            if room_model.occupied:
+                room_model.occupant = occupant[index]
+                room_model.guarantor = guarantor[index]
+            roomInfoModel.append(room_model)
+
+        return roomInfoModel
 
     def add_room(self):
         if len(self.get_all_rooms()) < 63:
@@ -59,10 +117,16 @@ class Database:
                 session.add(room)
                 session.commit()
                 session.refresh(room)
-                return room
+                return {'flag': True, 'data': RoomInfoModel(
+                        id=occupant.id,
+                        roomNumber=room_number[occupant.id],
+                        occupied=False,
+                        occupant=None,
+                        guarantor=None
+                        )}
         return {'flag': False, 'message': 'maximum room length reached !'}
 
-    def update_room_info(self, roomNumber: str, occupied: bool, occupant: Occupant, guarantor: Guarantor, room_id: int):
+    def update_room_info(self, occupant: Occupant, guarantor: Guarantor, room_id: int):
         with Session(self.engine) as session:
             edit_room = session.get(RoomInfo, room_id)
             edit_occupant = session.get(Occupant, room_id)

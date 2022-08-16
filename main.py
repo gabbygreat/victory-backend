@@ -2,7 +2,7 @@ from datetime import datetime
 from fastapi import FastAPI, Body
 
 from database import Database
-from models import Guarantor, Occupant, RoomInfo
+from models import Guarantor, Occupant, RoomInfo, RoomInfoModel
 
 app = FastAPI()
 database = Database()
@@ -14,7 +14,7 @@ async def home():
 
 
 @app.get('/rooms')
-async def get_all_rooms():
+async def get_all_rooms() -> list[RoomInfoModel]:
     return database.get_all_rooms()
 
 
@@ -24,8 +24,8 @@ async def add_room():
 
 
 @app.post('/rooms/{room_id}')
-async def update_room_info(room_id: int, occupant: Occupant, guarantor: Guarantor, occupied: bool = Body(embed=True), roomNumber: str = Body(embed=True),):
-    return database.update_room_info(room_id=room_id, roomNumber=roomNumber, occupant=occupant, guarantor=guarantor, occupied=occupied)
+async def update_room_info(room_id: int, occupant: Occupant, guarantor: Guarantor):
+    return database.update_room_info(room_id=room_id, occupant=occupant, guarantor=guarantor)
 
 
 @app.post('/clear/{room_id}')

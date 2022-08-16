@@ -1,7 +1,8 @@
 from cmath import phase
+from datetime import datetime
 from unicodedata import name
 from sqlmodel import SQLModel, create_engine, Session, select
-from models import RoomInfo, Guarantor, Occupant, RoomInfoModel
+from models import Expense, ExpenseModel, RoomInfo, Guarantor, Occupant, RoomInfoModel
 import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
@@ -176,3 +177,25 @@ class Database:
                 session.commit()
                 return {'flag': True}
             return {'flag': False}
+
+    def get_expenses(self):
+        with Session(self.engine) as session:
+            expenses = session.exec(select(Expense)).all()
+            roomInfoModel: list[ExpenseModel] = []
+
+        return {'flag': True, 'data': expenses}
+
+    def add_expenses(self, detailOfPayment: str, expenseType: str, amount: int, date: datetime):
+        with Session(self.engine) as session:
+            expense = Expense(detailOfPayment=detailOfPayment,
+                              expenseType=expenseType, date=date, amount=amount)
+            session.add(expense)
+
+            session.commit()
+            session.refresh(expense)
+            return {'flag': True, 'data': ExpenseModel(
+                    detailOfPayment=detailOfPayment,
+                    expenseType=expenseType,
+                    date=date,
+                    amount=amount
+                    )}

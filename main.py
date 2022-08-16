@@ -2,7 +2,7 @@ from datetime import datetime
 from fastapi import FastAPI, Body
 
 from database import Database
-from models import Guarantor, Occupant, RoomInfo, RoomInfoModel
+from models import ExpenseModel, Guarantor, Occupant, RoomInfo, RoomInfoModel
 
 app = FastAPI()
 database = Database()
@@ -39,5 +39,5 @@ async def get_expenses():
 
 
 @app.post('/api/expense')
-async def add_expenses(detailOfPayment: str, expenseType: str, amount: int, date: datetime):
-    return database.add_expenses(detailOfPayment=detailOfPayment, expenseType=expenseType, date=date, amount=amount)
+async def add_expenses(expense: ExpenseModel):
+    return database.add_expenses(expense)

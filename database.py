@@ -185,17 +185,17 @@ class Database:
 
         return {'flag': True, 'data': expenses}
 
-    def add_expenses(self, detailOfPayment: str, expenseType: str, amount: int, date: datetime):
+    def add_expenses(self, expense: ExpenseModel):
         with Session(self.engine) as session:
-            expense = Expense(detailOfPayment=detailOfPayment,
-                              expenseType=expenseType, date=date, amount=amount)
+            expense = Expense(detailOfPayment=expense.detailOfPayment,
+                              expenseType=expense.expenseType, date=expense.date, amount=expense.amount)
             session.add(expense)
 
             session.commit()
             session.refresh(expense)
             return {'flag': True, 'data': ExpenseModel(
-                    detailOfPayment=detailOfPayment,
-                    expenseType=expenseType,
-                    date=date,
-                    amount=amount
+                    detailOfPayment=expense.detailOfPayment,
+                    expenseType=expense.expenseType,
+                    date=expense.date,
+                    amount=expense.amount
                     )}

@@ -1,6 +1,3 @@
-from cmath import phase
-from datetime import datetime
-from unicodedata import name
 from sqlmodel import SQLModel, create_engine, Session, select
 from models import Expense, ExpenseModel, RoomInfo, Guarantor, Occupant, RoomInfoModel
 import os

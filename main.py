@@ -23,12 +23,12 @@ async def add_room():
     return database.add_room()
 
 
-@app.post('/api/rooms/{room_id}')
+@app.put('/api/rooms/{room_id}')
 async def update_room_info(room_id: int, occupant: Occupant, guarantor: Guarantor):
     return database.update_room_info(room_id=room_id, occupant=occupant, guarantor=guarantor)
 
 
-@app.post('/api/clear/{room_id}')
+@app.put('/api/clear/{room_id}')
 async def clear_room(room_id: int):
     return database.clear_room(room_id=room_id)
 

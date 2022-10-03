@@ -3,7 +3,9 @@ from models import Expense, ExpenseModel, RoomInfo, Guarantor, Occupant, RoomInf
 import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
-conn_str = 'sqlite:///'+os.path.join(BASE_DIR, 'hostel.db')
+# conn_str = 'sqlite:///'+os.path.join(BASE_DIR, 'hostel.db')
+# conn_str = 'postgresql://postgres:gabbygreat1Aheaven4me@localhost/victoryvilla'
+conn_str = 'postgresql://xrlgqduyubrywz:ee9b3d59aad15c9c361e5a197aa7d8641ac57c44d5299348c69efd4a7b3481d3@ec2-3-223-242-224.compute-1.amazonaws.com:5432/dc6qkqihdfcp0h'
 
 room_number: dict = {
     1: 'A001',
@@ -76,7 +78,7 @@ class Database:
     def __init__(self) -> None:
         connect_args = {"check_same_thread": False}
         self.engine = create_engine(
-            conn_str, echo=True, connect_args=connect_args)
+            conn_str, echo=True)
         SQLModel.metadata.create_all(self.engine)
 
     def get_all_rooms(self) -> list[RoomInfoModel]:

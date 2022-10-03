@@ -1,14 +1,15 @@
 from typing import Optional
 from datetime import datetime
-from sqlmodel import SQLModel, Field
+from sqlmodel import Column, SQLModel, Field
 from pydantic import BaseModel
+from sqlalchemy import BigInteger
 
 
 class Occupant(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: Optional[str] = Field(default=None)
     gender: Optional[str] = Field(default=None)
-    phoneNumber: Optional[int] = Field(default=None)
+    phoneNumber: Optional[str] = Field(default=None)
     stateOfOrigin: Optional[str] = Field(default=None)
     dateOfRentPayment: Optional[datetime] = Field(default=None)
 
@@ -16,16 +17,15 @@ class Occupant(SQLModel, table=True):
 class Guarantor(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: Optional[str] = Field(default=None)
-    phoneNumber: Optional[int] = Field(default=None)
+    phoneNumber: Optional[str] = Field(default=None)
 
 
 class RoomInfo(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     roomNumber: str
     occupied: bool
-    occupant_id: Optional[int] = Field(default=None, foreign_key='occupant.id')
-    guarantor_id: Optional[int] = Field(
-        default=None, foreign_key='guarantor.id')
+    occupant_id: Optional[int] = Field(default=None, foreign_key='occupant.id',)
+    guarantor_id: Optional[int] = Field(default=None, foreign_key='guarantor.id')
 
 
 class Expense(SQLModel, table=True):
@@ -39,14 +39,14 @@ class Expense(SQLModel, table=True):
 class OccupantModel(BaseModel):
     name: str
     gender: str
-    phoneNumber: int
+    phoneNumber: str
     stateOfOrigin: str
     dateOfRentPayment: datetime
 
 
 class GuarantorModel(BaseModel):
     name: str
-    phoneNumber: int
+    phoneNumber: str
 
 
 class RoomInfoModel(BaseModel):

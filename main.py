@@ -39,7 +39,7 @@ async def get_expenses():
 
 
 @app.get('/api/rent')
-async def get_rent():
+async def get_all_rent():
     return database.get_rent()
 
 

@@ -1,8 +1,7 @@
 from typing import Optional
 from datetime import datetime
-from sqlmodel import Column, SQLModel, Field
+from sqlmodel import SQLModel, Field
 from pydantic import BaseModel
-from sqlalchemy import BigInteger
 
 
 class Occupant(SQLModel, table=True):
@@ -24,8 +23,11 @@ class RoomInfo(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     roomNumber: str
     occupied: bool
-    occupant_id: Optional[int] = Field(default=None, foreign_key='occupant.id',)
-    guarantor_id: Optional[int] = Field(default=None, foreign_key='guarantor.id')
+    price: int
+    occupant_id: Optional[int] = Field(
+        default=None, foreign_key='occupant.id',)
+    guarantor_id: Optional[int] = Field(
+        default=None, foreign_key='guarantor.id')
 
 
 class Expense(SQLModel, table=True):
@@ -53,6 +55,7 @@ class RoomInfoModel(BaseModel):
     id: int
     roomNumber: str
     occupied: bool
+    price: int
     occupant: OccupantModel | None = None
     guarantor: GuarantorModel | None = None
 

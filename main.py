@@ -38,6 +38,16 @@ async def get_expenses():
     return database.get_expenses()
 
 
+@app.get('/api/rent')
+async def get_rent():
+    return database.get_rent()
+
+
+@app.get('/api/rent/{room_id}')
+async def get_rent(room_id: int):
+    return database.get_room_rent(room_id)
+
+
 @app.post('/api/expense')
 async def add_expenses(expense: ExpenseModel):
     return database.add_expenses(expense)

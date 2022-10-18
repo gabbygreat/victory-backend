@@ -4,8 +4,8 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.realpath(__file__))
 # conn_str = 'sqlite:///'+os.path.join(BASE_DIR, 'hostel.db')
-conn_str = 'postgresql://postgres:gabbygreat1Aheaven4me@localhost/victory'
-# conn_str = 'postgresql://sbftdttfxzitje:e57a0faaf27fb7e5fb42fcf69be0386dca9f62547e6fea11622b502cb1a8e290@ec2-3-223-242-224.compute-1.amazonaws.com:5432/da8rtdt1sug425'
+# conn_str = 'postgresql://postgres:gabbygreat1Aheaven4me@localhost/victory'
+conn_str = 'postgresql://irsexclhhtxniu:220f249c5484631c95016fbc07c167f00d7cffc34a74e9953d1ed5982c85df48@ec2-54-147-36-107.compute-1.amazonaws.com:5432/d36vui0jbg2ug8'
 
 room_number: dict[int, list[str]] = {
     1: ['A001', 230000],
